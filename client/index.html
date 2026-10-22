@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web Slideshow</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="app">
+    <div id="slides-container"></div>
+    <div id="progress-bar"><div id="progress-fill"></div></div>
+    <div id="slide-counter">0 / 0</div>
+    <div id="help-overlay" class="hidden">
+      <div class="help-content">
+        <h2>Keyboard Shortcuts</h2>
+        <table>
+          <tr><td><kbd>→</kbd> / <kbd>Space</kbd></td><td>Next slide</td></tr>
+          <tr><td><kbd>←</kbd></td><td>Previous slide</td></tr>
+          <tr><td><kbd>Home</kbd> / <kbd>g</kbd></td><td>First slide</td></tr>
+          <tr><td><kbd>End</kbd> / <kbd>G</kbd></td><td>Last slide</td></tr>
+          <tr><td><kbd>f</kbd></td><td>Load .md file</td></tr>
+          <tr><td><kbd>?</kbd></td><td>Show/hide this help</td></tr>
+          <tr><td><kbd>Esc</kbd></td><td>Dismiss overlay</td></tr>
+        </table>
+      </div>
+    </div>
+    <input type="file" id="file-input" accept=".md,.markdown,.txt" hidden>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

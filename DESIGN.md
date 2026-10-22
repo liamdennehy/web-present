@@ -53,10 +53,11 @@ using a **density-based heuristic**:
    - **No images** → full-bleed text, centered.
    - **One dominant image** (> 50 % of slide area) → image takes the larger
      region (left or right depending on text density); text flows in the
-   remaining space.
-   - **Multiple images** → grid layout; images placed top-down, text interleaved.
-   - **Small images / icons** → inline within the text at their document
-     position.
+     remaining space.
+   - **Multiple images** → left/right alternating; first image on left, second on right, text interleaved between image rows.
+   - **Multiple images** → left/right alternating; first image on the left,
+     second on the right, third on the left, etc. Text interleaved between
+     image rows.
 
 **Text-density heuristic**: When text is sparse (short bullet lists, few
 words), the image is placed on the **left** with text to its right. When text
