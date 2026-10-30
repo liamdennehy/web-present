@@ -273,7 +273,7 @@ function planLayout(images, textDensity) {
  * @param {string} rawMarkdown - The raw .md file content.
  * @returns {Object} { title, slides: [{ title, html, theme, images, layout }] }
  */
-export function parseMarkdown(rawMarkdown) {
+export function parseMarkdown(rawMarkdown, basePath) {
   const { meta, body } = extractFrontMatter(rawMarkdown);
   const splitResult = splitSlides(body);
   const slides = splitResult.slides;
@@ -281,9 +281,23 @@ export function parseMarkdown(rawMarkdown) {
 
   // Convert each slide's markdown to HTML and gather image info
   const parsedSlides = slides.map((slide, idx) => {
+    const headingHtml = slide.title ? `<h2>${slide.title}</h2>` : '';
     const html = marked.parse(slide.content || '');
+    const fullHtml = headingHtml + (headingHtml && html ? '\n' + html : html);
 
-    // Parse images from HTML
+    // Fix relative image paths using the source file's directory
+    const resolvedHtml = fullHtml.replace(
+      /<img\s+([^>]*?)src="([^"]+)"([^>]*?)>/g,
+      (match, before, src, after) => {
+        if (src.startsWith('/') || src.startsWith('http') || src.startsWith('data:')) {
+          return match; // already absolute or protocol-relative
+        }
+        const resolved = basePath ? basePath.replace(/\/$/, '') + '/' + src : src;
+        return `<img ${before}src="${resolved}"${after}>`;
+      },
+    );
+
+    // Parse images from resolved HTML
     const imgRegex = /<img[^>]+src="([^"]+)"[^>]*alt="([^"]*)"[^>]*>/g;
     const images = [];
     let match;
@@ -302,7 +316,7 @@ export function parseMarkdown(rawMarkdown) {
     return {
       title: (slide.title === '' || slide.title) ? slide.title : `Slide ${idx + 1}`,
       content: slide.content || '',
-      html,
+      html: resolvedHtml,
       theme: slide.theme || (idx === 0 && meta?.theme ? meta.theme : null),
       images,
       textDensity,

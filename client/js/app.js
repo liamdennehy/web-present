@@ -23,7 +23,7 @@ async function init() {
   try {
     const response = await fetch('slides/default.md');
     const text = await response.text();
-    await loadSlides(text);
+    await loadSlides(text, 'slides/');
   } catch {
     // No default slide — show a welcome slide
     const welcome = `# Welcome to Web Slideshow
@@ -40,8 +40,8 @@ Your .md file will be rendered as slides — each **##** heading starts a new sl
 /**
  * Load raw Markdown text, parse, resolve image layouts, apply theme, render.
  */
-async function loadSlides(rawMarkdown) {
-  parsed = parseMarkdown(rawMarkdown);
+async function loadSlides(rawMarkdown, basePath) {
+  parsed = parseMarkdown(rawMarkdown, basePath || '');
 
   // Apply global theme
   applyGlobalTheme(parsed.theme);
@@ -51,6 +51,9 @@ async function loadSlides(rawMarkdown) {
 
   renderSlides();
   goToSlide(0);
+
+  // Set browser tab title to presentation title
+  document.title = parsed.title || 'Web Slideshow';
 }
 
 // ── Rendering ──────────────────────────────────────────
@@ -222,7 +225,10 @@ function handleFileSelect(event) {
 
   const reader = new FileReader();
   reader.onload = (e) => {
-    loadSlides(e.target.result);
+    // Try to infer base path from file name (e.g., "slides/present.md" -> "slides/")
+    const parts = file.name.split('/');
+    const baseDir = parts.length > 1 ? parts.slice(0, -1).join('/') + '/' : '';
+    loadSlides(e.target.result, baseDir);
   };
   reader.readAsText(file);
 

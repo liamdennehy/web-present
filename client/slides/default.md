@@ -60,13 +60,19 @@ Defaults work fine if you skip it.
 
 ## Image Layout
 
-Images are placed dynamically:
+Images are placed dynamically based on text density:
 
 - **Sparse text** → image on the left
 - **Dense text** → image on the right
 - **Multiple images** → left/right alternating
 
 Small images stay inline. No manual positioning needed.
+
+![Architecture overview](architecture.svg)
+
+![Responsive layout](layout.svg)
+
+![Mobile view](mobile.svg)
 
 ## Navigation
 
@@ -81,16 +87,68 @@ Small images stay inline. No manual positioning needed.
 
 You can also **click** the left/right edges of a slide to navigate.
 
-## Supported Markdown
+## Markdown Showcase
 
-Full CommonMark support via `marked.js`:
+Full CommonMark support via `marked.js` — here's everything:
 
-- **Bold**, *italic*, ~~strikethrough~~
-- Code blocks with `` `inline code` ``
-- Blockquotes and horizontal rules
-- Bullet and numbered lists
-- Tables
-- Links and images
+### Text Formatting
+
+**Bold text** for emphasis. *Italic text* for subtle points. ***Bold italic***
+for maximum weight. ~~Strikethrough~~ for corrections.
+
+Inline `code` uses backticks. A longer `const x = 42; // inline code example`
+stays readable.
+
+### Lists
+
+Nested lists work naturally:
+
+1. First item
+2. Second item
+   - Sub-point A
+   - Sub-point B
+     - Deeper level
+3. Third item
+
+### Blockquotes
+
+> A presentation should inspire, not overwhelm.
+> — *Principle of clean slides*
+
+### Code Blocks
+
+```python
+def fibonacci(n):
+    a, b = 0, 1
+    for _ in range(n):
+        yield a
+        a, b = b, a + b
+
+print(list(fibonacci(10)))
+```
+
+### Tables
+
+| Feature          | Status  | Priority |
+|------------------|---------|----------|
+| Keyboard nav     | ✅ Done | High     |
+| Image layout     | ✅ Done | High     |
+| Speaker notes    | 🔲 TBD  | Medium   |
+| PDF export       | 🔲 TBD  | Low      |
+
+### Links and Images
+
+[Visit marked.js on GitHub](https://github.com/markedjs/marked)
+
+![Architecture](architecture.svg)
+
+![Responsive layout](layout.svg)
+
+![Mobile view](mobile.svg)
+
+---
+
+That's the full range — plain text, your whole toolbox.
 
 ## Get Started
 
