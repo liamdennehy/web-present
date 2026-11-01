@@ -19,6 +19,18 @@ const fileInput = document.getElementById('file-input');
 
 // ── Init ───────────────────────────────────────────────
 async function init() {
+  const params = new URLSearchParams(window.location.search);
+  const folder = params.get('folder');
+
+  if (folder) {
+    // Load from a server-hosted presentation folder
+    const url = folder.replace(/\/$/, '') + '/index.md';
+    const response = await fetch(url);
+    const text = await response.text();
+    await loadSlides(text, folder.replace(/\/$/, '') + '/');
+    return;
+  }
+
   // Try to load default slide, fall back to empty
   try {
     const response = await fetch('slides/default.md');
