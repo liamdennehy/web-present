@@ -3,13 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Web Slideshow</title>
+  <title>Web Present</title>
   <link rel="icon" href="favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
   <div id="app">
-    <div id="slides-container"></div>
+    <div id="slides-container">
+      <div id="font-up-zone" title="Increase font size"></div>
+      <div id="font-down-zone" title="Decrease font size"></div>
+    </div>
     <div id="progress-bar"><div id="progress-fill"></div></div>
     <div id="slide-counter">0 / 0</div>
     <div id="help-overlay" class="hidden">
@@ -28,7 +31,7 @@
     </div>
     <input type="file" id="file-input" accept=".md,.mkd,.markdown,.txt" hidden>
   </div>
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="js/marked.min.js" onerror="document.body.innerHTML='<div style=\'padding:2rem;font-family:sans-serif\'><h2>marked.js not found</h2><p>Download the library and place it at <code>js/marked.min.js</code>:</p><pre style=\'margin:1rem;padding:1rem;background:#f4f4f4;border-radius:4px\'>curl -o js/marked.min.js https://cdn.jsdelivr.net/npm/marked/marked.min.js</pre></div>'"></script>
   <script type="module" src="js/app.js"></script>
 </body>
 </html>

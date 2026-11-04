@@ -9,6 +9,19 @@ import { applyGlobalTheme, applySlideTheme } from './theme.js';
 let parsed = null;
 let currentIndex = 0;
 let isTransitioning = false;
+let fontScale = parseFloat(localStorage.getItem('fontScale')) || 1;
+const FONT_STEP = 0.1;
+const FONT_MIN = 0.5;
+const FONT_MAX = 2.0;
+
+// ── DOM refs ───────────────────────────────────────────
+const slidesContainer = document.getElementById('slides-container');
+const progressFill = document.getElementById('progress-fill');
+const slideCounter = document.getElementById('slide-counter');
+const helpOverlay = document.getElementById('help-overlay');
+const fileInput = document.getElementById('file-input');
+const fontUpZone = document.getElementById('font-up-zone');
+const fontDownZone = document.getElementById('font-down-zone');
 
 // ── DOM refs ───────────────────────────────────────────
 const slidesContainer = document.getElementById('slides-container');
@@ -24,7 +37,7 @@ async function init() {
 
   if (folder) {
     // Load from a server-hosted presentation folder
-    const url = folder.replace(/\/$/, '') + '/index.md';
+    const url = folder.replace(/\/$/, '') + '/slides.md';
     const response = await fetch(url);
     const text = await response.text();
     await loadSlides(text, folder.replace(/\/$/, '') + '/');
@@ -337,7 +350,9 @@ document.addEventListener('touchend', handleTouchEnd, { passive: true });
 
 // Click navigation on slides
 slidesContainer.addEventListener('click', (e) => {
-  // Right side of slide = next, left side = previous
+  // Ignore clicks on font zones
+  if (e.target === fontUpZone || e.target === fontDownZone) return;
+
   const rect = slidesContainer.getBoundingClientRect();
   const x = e.clientX - rect.left;
   if (x > rect.width * 0.7) {
@@ -346,6 +361,18 @@ slidesContainer.addEventListener('click', (e) => {
     prevSlide();
   }
 });
+
+// Font size zones
+function adjustFont(delta) {
+  fontScale = Math.round(Math.max(FONT_MIN, Math.min(FONT_MAX, fontScale + delta)) * 100) / 100;
+  document.documentElement.style.fontSize = fontScale * 100 + '%';
+  localStorage.setItem('fontScale', fontScale);
+}
+
+fontUpZone.addEventListener('click', () => adjustFont(FONT_STEP));
+fontUpZone.addEventListener('touchend', (e) => { e.preventDefault(); adjustFont(FONT_STEP); });
+fontDownZone.addEventListener('click', () => adjustFont(-FONT_STEP));
+fontDownZone.addEventListener('touchend', (e) => { e.preventDefault(); adjustFont(-FONT_STEP); });
 
 // ── Start ──────────────────────────────────────────────
 init();
